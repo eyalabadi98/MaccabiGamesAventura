@@ -1,31 +1,22 @@
-# import csv
-#
-# with open('Example-Eyal.csv', mode='r') as infile:
-#     reader = csv.reader(infile)
-#     for row in reader:
-#         print row
-# print "Hello"
 
 
 import csv
 import json
+import io
 
 result = {}
 index = 0
-with open('SalesJan2009.csv','rb') as pscfile:
+with io.open('example4.csv','rb') as pscfile:
     reader = csv.DictReader(pscfile)
     for row in reader:
         index += 1
-        if index > 3:
-             break
-        # for column, value in row.iteritems():
-        #     result.setdefault(column, []).append(value)
-
-        price =  row['Key']
-        print price
+        #if index > 18:
+             #break
+        #price =  row['Key']
+        #print row
         #result.setdefault(key, []).append(row[?])
         result.setdefault(row['Key'], []).append(row)
-        result.keys().sort()
+        # result.keys().sort()
         print result
 
 
@@ -33,12 +24,14 @@ with open('SalesJan2009.csv','rb') as pscfile:
 
 
 with open('result.json', 'w') as fp:
-    json.dump(result, fp)
+    json.dump(result, fp, ensure_ascii=False)
 
-# index += 1
-# if index > 10:
-#     break
-# if row in result:
-#     pass
-# result[row] = row
-# print row[6]
+# with open("result.json", "r") as add:
+#     json_data = json.load(add)
+#     for change in json_data["CHILD"]:
+#         # strip the contents of trailing white spaces (new line)
+#         change["ORANGE"] = contents.strip()
+#
+# # dump json to another file
+# with open("out.json", "w") as fout:
+#     four.write(json.dumps(json_data, ensure_ascii=False))
