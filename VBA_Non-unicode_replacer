@@ -1,0 +1,9 @@
+Sub Worksheet_Activate()
+  For Each cell In ActiveSheet.UsedRange.Cells
+    cell.Value = Replace(cell.Value, Chr(160), " REPLACED!!!")
+    cell.Value = Replace(cell.Value, Chr(10), "REPLACED ")
+    cell.Value = Replace(cell.Value, Chr(202), "")
+  
+  Next
+Range("L3") = "Finished"
+End Sub
