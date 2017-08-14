@@ -1,0 +1,79 @@
+function getAllData() {
+  var firebaseUrl = "yoururlhere";
+  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl);
+  var data = base.getData();
+  var iterator = 0
+  var obje = []
+  var numberofItems = 10
+  var itemsDownloaded = numberofItems - 1
+  
+  
+   var headerName = [[
+     "Key", "Time", "Location", "Participant_1", "Participant_2", "Category", "Team 1 Score", 
+     "Team 2 Score", "Game Details"  ]]
+    
+   var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange("A5:I5");
+    rangeValuesRow.setValues(headerName);
+      
+      
+     
+     
+  for(var i in data) {
+    iterator++;
+    if (iterator > numberofItems) {
+      break
+    }
+    
+    if (data[i] !== null) {
+      Logger.log('Pushing' + JSON.stringify(data[i]));
+      obje.push(data[i]) 
+    }
+  }
+  
+    var range = SpreadsheetApp.getActiveSheet().getRange("A5:K5");
+    range.setBackground("red");
+ 
+  var data = [[]]
+  
+  var data = new Array(itemsDownloaded);
+for (var i = 0; i < itemsDownloaded; i++) {
+  data[i] = new Array(itemsDownloaded);
+}
+  var number = 5
+  Logger.log(obje.length);
+  for (var i in obje) {
+    Logger.log('Hello' + i)
+    number++
+        
+        data[i][0] = obje[i].Key
+        data[i][1] = obje[i].Time
+        data[i][2] = obje[i].Location
+        data[i][3] = obje[i].Participant_1
+        data[i][4] = obje[i].Participant_2
+        data[i][5] = obje[i].Category
+        data[i][6] = obje[i].team1Score
+        data[i][7] = obje[i].team2Score
+        data[i][8] = obje[i].gameDetails
+      
+        
+      if (i % 2 === 0) {
+        //var range = SpreadsheetApp.getActiveSheet().getRange("A" + number + ":K" + number);
+        //range.setBackground("lightblue");
+      }
+    else {
+      //var range = SpreadsheetApp.getActiveSheet().getRange("A" + number + ":K" + number);
+        //range.setBackground("lightgreen");
+    }
+    
+     
+  }
+  
+  Logger.log("Data is" + data)
+  
+      var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,itemsDownloaded,itemsDownloaded);
+      rangeValuesRow.setValues(data);
+    
+     
+      
+      
+}
