@@ -1,18 +1,20 @@
+
 function getAllData() {
-  var firebaseUrl = "yoururlhere";
+  var firebaseUrl = "yoururlherre";
   var base = FirebaseApp.getDatabaseByUrl(firebaseUrl);
   var data = base.getData();
   var iterator = 0
   var obje = []
-  var numberofItems = 10
+  var numberofItems = 40
   var itemsDownloaded = numberofItems - 1
+  var numberOfColumsn = 12
   
   
    var headerName = [[
-     "Key", "Time", "Location", "Participant_1", "Participant_2", "Category", "Team 1 Score", 
-     "Team 2 Score", "Game Details"  ]]
+     "Key","Date", "Time", "Location", "Participant_1", "Participant_2", "Category", "Team 1 Score", 
+     "Team 2 Score", "Game Details", "Changed by", "Time changed by User"  ]]
     
-   var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange("A5:I5");
+   var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange("A5:L5");
     rangeValuesRow.setValues(headerName);
       
       
@@ -30,14 +32,14 @@ function getAllData() {
     }
   }
   
-    var range = SpreadsheetApp.getActiveSheet().getRange("A5:K5");
+    var range = SpreadsheetApp.getActiveSheet().getRange("A5:L5");
     range.setBackground("red");
  
   var data = [[]]
   
-  var data = new Array(itemsDownloaded);
+  var data = new Array(numberOfColumsn);
 for (var i = 0; i < itemsDownloaded; i++) {
-  data[i] = new Array(itemsDownloaded);
+  data[i] = new Array(numberOfColumsn);
 }
   var number = 5
   Logger.log(obje.length);
@@ -46,14 +48,17 @@ for (var i = 0; i < itemsDownloaded; i++) {
     number++
         
         data[i][0] = obje[i].Key
-        data[i][1] = obje[i].Time
-        data[i][2] = obje[i].Location
-        data[i][3] = obje[i].Participant_1
-        data[i][4] = obje[i].Participant_2
-        data[i][5] = obje[i].Category
-        data[i][6] = obje[i].team1Score
-        data[i][7] = obje[i].team2Score
-        data[i][8] = obje[i].gameDetails
+        data[i][1] = obje[i].Date
+        data[i][2] = obje[i].Time
+        data[i][3] = obje[i].Location
+        data[i][4] = obje[i].Participant_1
+        data[i][5] = obje[i].Participant_2
+        data[i][6] = obje[i].Category
+        data[i][7] = obje[i].team1Score
+        data[i][8] = obje[i].team2Score
+        data[i][9] = obje[i].gameDetails
+        data[i][10] = obje[i].emailUser
+        data[i][11] = obje[i].dateChanged
       
         
       if (i % 2 === 0) {
@@ -67,10 +72,11 @@ for (var i = 0; i < itemsDownloaded; i++) {
     
      
   }
+  //Logger.log('Data for i is ' + data[1])
   
   Logger.log("Data is" + data)
   
-      var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,itemsDownloaded,itemsDownloaded);
+      var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,itemsDownloaded, numberOfColumsn);
       rangeValuesRow.setValues(data);
     
      
