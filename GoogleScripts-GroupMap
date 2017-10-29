@@ -1,0 +1,106 @@
+function CardMaker1() {
+ 
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+  var data = sheet.getRange(2, 1, sheet.getLastRow()-1, sheet.getLastColumn()).getValues();
+  
+  var folderID = "FOLDER_ID_REPLACE";
+  var templateid = "TEMPLADE_ID_REPLACE";
+  var file = DriveApp.getFileById(templateid);
+  
+ 
+  
+  var fileName = "YOUR_FILE_NAME"
+  var newDoc = DocumentApp.create(fileName);
+  var file = DriveApp.getFileById(newDoc.getId());
+  var folder = DriveApp.getFolderById(folderID);
+  folder.addFile(file);
+  
+  
+  Logger.log("Data is" + data)
+  
+  var map = new Object(); // or var map = {};
+
+
+  
+  for ( var i in data) {
+    var stri= data[i][84];
+    if (map[stri] != undefined) {
+      var tempFamily = map[stri];
+      tempFamily.push(data[i]);
+      map[stri] = tempFamily;
+      
+    }
+    else {
+      map[stri] = [data[i]];
+    }
+    Logger.log("Map is "+ map[stri]);
+  }
+  
+  
+  
+    
+  for (var family in map) {
+    Logger.log("Printing "+ map[family])
+    
+    var docid = DriveApp.getFileById(templateid).makeCopy().getId();
+    var doc = DocumentApp.openById(docid);
+    var body = doc.getActiveSection();
+    var col = map[family]
+    
+    Logger.log("Family is "+ map[family])
+    for (var person in map[family]) {
+      var it = person;
+      it++
+      Logger.log("Name putting" + map[family][person][1])
+      Logger.log("Puttin in " + "%name" + it + "%")
+      body.replaceText("%name" + it + "%", map[family][person][1]);
+      body.replaceText("%family%", map[family][person][84]);
+      body.replaceText("%lastname%", map[family][person][2]);
+      body.replaceText("%country" + it + "%", map[family][person][5]); 
+      body.replaceText("%category" + it + "%", map[family][person][17]); 
+      body.replaceText("%size" + it + "%", map[family][person][19]); 
+      
+      
+    }
+    
+    for (var x =1;x<11;x++) {
+      Logger.log("Replacing " + x)
+      body.replaceText("%name" + x + "%", "");
+      body.replaceText("%country" + x + "%",""); 
+      body.replaceText("%category" + x + "%",""); 
+      body.replaceText("%size" + x + "%", "");
+    }
+    doc.saveAndClose();
+    var body = doc.getActiveSection();
+    var newBody = newDoc.getActiveSection();
+    appendToDoc1(body, newBody);
+    Logger.log("Outputting to file");
+    DriveApp.getFileById(docid).setTrashed(true); // delete temporay template file
+  
+    
+  }
+  
+
+}
+
+function appendToDoc1(src, dst) {
+// iterate accross the elements in the source adding to the destination
+  for (var i = 0; i < src.getNumChildren(); i++) {
+    appendElementToDoc1(dst, src.getChild(i));
+  }
+}
+
+function appendElementToDoc1(doc, object) {
+  var type = object.getType(); // need to handle different types para, table etc differently
+  var element = object.copy();
+  if (type == "PARAGRAPH") {
+    doc.appendParagraph(element);
+    
+  } 
+  else if (type == "TABLE") {
+    doc.appendTable(element);
+  }
+
+}
