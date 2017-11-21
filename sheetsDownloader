@@ -1,26 +1,31 @@
 
 function getAllData() {
-  var firebaseUrl = "yoururlherre";
-  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl);
-  var data = base.getData();
+  //var firebaseUrl = "Your_LINK";
+  //var base = FirebaseApp.getDatabaseByUrl(firebaseUrl);
+  
+  //var data = base.getData();
+  
+  var Number = 1;
+ 
   var iterator = 0
   var obje = []
-  var numberofItems = 40
+  var numberofItems = 875
   var itemsDownloaded = numberofItems - 1
-  var numberOfColumsn = 12
+  var numberOfColumsn = 18
   
   
    var headerName = [[
-     "Key","Date", "Time", "Location", "Participant_1", "Participant_2", "Category", "Team 1 Score", 
-     "Team 2 Score", "Game Details", "Changed by", "Time changed by User"  ]]
+     "Key","Date", "Time", "Location","Sports","Series", "Participant_1", "Participant_2", "Category", "Team 1 Score", 
+     "Team 2 Score", "Game Details", "Round", "Changed by", "Time changed by User", "Previous Location", "Previous Time", "Previous Date"  ]]
     
-   var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange("A5:L5");
+  
+   var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange("A5:R5");
     rangeValuesRow.setValues(headerName);
       
-      
+      /*
      
-     
-  for(var i in data) {
+   Logger.log("Data is ", data);  
+  for(var i in allData) {
     iterator++;
     if (iterator > numberofItems) {
       break
@@ -31,36 +36,66 @@ function getAllData() {
       obje.push(data[i]) 
     }
   }
+  */
   
-    var range = SpreadsheetApp.getActiveSheet().getRange("A5:L5");
+  for(var i=1;i<numberofItems;i++){
+    var url = 'Your_Link' + i + '.json'
+    var response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
+    Logger.log("Response is" + response)
+    
+    if (!response) {
+      continue
+    }
+    
+    
+    obje.push(JSON.parse(response))
+    //data[i] = response
+  }
+  
+  Logger.log("Obje lenght" + obje.length)
+  
+    var range = SpreadsheetApp.getActiveSheet().getRange("A5:R5");
     range.setBackground("red");
  
   var data = [[]]
   
-  var data = new Array(numberOfColumsn);
+  //var data = new Array(numberOfColumsn);
+  
+  
 for (var i = 0; i < itemsDownloaded; i++) {
   data[i] = new Array(numberOfColumsn);
 }
+  
+  
   var number = 5
-  Logger.log(obje.length);
+  Logger.log("Objec lenght "+ obje);
   for (var i in obje) {
-    Logger.log('Hello' + i)
+    //Logger.log('Hello' + obje[i].Key )
+    if (obje[i] == null) {
+      continue;
+    }
+    
     number++
-        
         data[i][0] = obje[i].Key
         data[i][1] = obje[i].Date
         data[i][2] = obje[i].Time
         data[i][3] = obje[i].Location
-        data[i][4] = obje[i].Participant_1
-        data[i][5] = obje[i].Participant_2
-        data[i][6] = obje[i].Category
-        data[i][7] = obje[i].team1Score
-        data[i][8] = obje[i].team2Score
-        data[i][9] = obje[i].gameDetails
-        data[i][10] = obje[i].emailUser
-        data[i][11] = obje[i].dateChanged
+        data[i][4] = obje[i].Sports
+        data[i][5] = obje[i].Series
+        data[i][6] = obje[i].Participant_1
+        data[i][7] = obje[i].Participant_2
+        data[i][8] = obje[i].Category
+        data[i][9] = obje[i].team1Score
+        data[i][10] = obje[i].team2Score
+        data[i][11] = obje[i].gameDetails
+        data[i][12] = obje[i].Round
+        data[i][13] = obje[i].emailUser
+        data[i][14] = obje[i].dateChanged
+        data[i][15] = obje[i].LocationChange
+        data[i][16] = obje[i].timeChange
+        data[i][17] = obje[i].dateChange
       
-        
+        //Logger.log("Data is loop" + data)
       if (i % 2 === 0) {
         //var range = SpreadsheetApp.getActiveSheet().getRange("A" + number + ":K" + number);
         //range.setBackground("lightblue");
@@ -72,12 +107,21 @@ for (var i = 0; i < itemsDownloaded; i++) {
     
      
   }
-  //Logger.log('Data for i is ' + data[1])
   
-  Logger.log("Data is" + data)
+  
+  //Logger.log("Obje " + obje)
+  Logger.log("Data " + data)
+  
   
       var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,itemsDownloaded, numberOfColumsn);
+  
+      //var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,3, 18);
+      //var rangeValuesRow = SpreadsheetApp.getActiveSheet().getRange(6,1,1,2);
+  
+  
       rangeValuesRow.setValues(data);
+  
+      //SpreadsheetApp.getActiveSheet().getRange('F2').setValue(data);
     
      
       
